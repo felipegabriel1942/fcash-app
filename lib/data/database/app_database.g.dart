@@ -109,6 +109,18 @@ class _$ExpenseLocalDataSource extends ExpenseLocalDataSource {
                   'categorie': item.categorie,
                   'observation': item.observation
                 }),
+        _expenseUpdateAdapter = UpdateAdapter(
+            database,
+            'Expense',
+            ['id'],
+            (Expense item) => <String, dynamic>{
+                  'id': item.id,
+                  'description': item.description,
+                  'value': item.value,
+                  'date': item.date,
+                  'categorie': item.categorie,
+                  'observation': item.observation
+                }),
         _expenseDeletionAdapter = DeletionAdapter(
             database,
             'Expense',
@@ -138,6 +150,8 @@ class _$ExpenseLocalDataSource extends ExpenseLocalDataSource {
 
   final InsertionAdapter<Expense> _expenseInsertionAdapter;
 
+  final UpdateAdapter<Expense> _expenseUpdateAdapter;
+
   final DeletionAdapter<Expense> _expenseDeletionAdapter;
 
   @override
@@ -155,6 +169,12 @@ class _$ExpenseLocalDataSource extends ExpenseLocalDataSource {
   @override
   Future<int> insertExpense(Expense expense) {
     return _expenseInsertionAdapter.insertAndReturnId(
+        expense, OnConflictStrategy.abort);
+  }
+
+  @override
+  Future<int> updateExpense(Expense expense) {
+    return _expenseUpdateAdapter.updateAndReturnChangedRows(
         expense, OnConflictStrategy.abort);
   }
 

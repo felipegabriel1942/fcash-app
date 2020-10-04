@@ -1,4 +1,5 @@
 import 'package:fcash_app/controllers/expenses/expenses_form_controller.dart';
+import 'package:fcash_app/data/models/expense.dart';
 import 'package:flushbar/flushbar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -18,8 +19,8 @@ class _ExpensesFormScreenState extends State<ExpensesFormScreen> {
   ReactionDisposer disposer;
 
   @override
-  void didChangeDependencies() {
-    super.didChangeDependencies();
+  void initState() {
+    super.initState();
 
     disposer = autorun((_) {
       if (controller.isFormSaved) {
@@ -30,6 +31,17 @@ class _ExpensesFormScreenState extends State<ExpensesFormScreen> {
         ).show(context);
       }
     });
+  }
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+
+    final expense = ModalRoute.of(context).settings.arguments as Expense;
+
+    if (expense != null) {
+      controller.setExpense(expense);
+    }
   }
 
   @override
@@ -73,6 +85,7 @@ class _ExpensesFormScreenState extends State<ExpensesFormScreen> {
                         builder: (_) {
                           return Container(
                             child: TextFormField(
+                              initialValue: controller.description,
                               autovalidate: controller.autovalidate,
                               decoration: InputDecoration(
                                 labelText: 'Descrição',
@@ -87,6 +100,7 @@ class _ExpensesFormScreenState extends State<ExpensesFormScreen> {
                         builder: (_) {
                           return Container(
                             child: TextFormField(
+                              initialValue: controller.expenseValue,
                               autovalidate: controller.autovalidate,
                               decoration: InputDecoration(
                                 labelText: 'Valor (R\$)',
@@ -131,6 +145,7 @@ class _ExpensesFormScreenState extends State<ExpensesFormScreen> {
                         builder: (_) {
                           return Container(
                             child: DropdownButtonFormField(
+                              value: controller.categorie,
                               isExpanded: true,
                               autovalidate: controller.autovalidate,
                               decoration: InputDecoration(
@@ -153,6 +168,7 @@ class _ExpensesFormScreenState extends State<ExpensesFormScreen> {
                       ),
                       Container(
                         child: TextFormField(
+                          initialValue: controller.observation,
                           maxLines: 3,
                           decoration: InputDecoration(
                             labelText: 'Observação',

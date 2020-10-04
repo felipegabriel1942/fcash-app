@@ -30,7 +30,25 @@ class _ExpensesScreenState extends State<ExpensesScreen> {
 
     return Scaffold(
       appBar: AppBar(
-        title: Text('Despesas'),
+        title: Column(
+          mainAxisAlignment: MainAxisAlignment.end,
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: [
+            Text('Despesas'),
+            Observer(builder: (_) {
+              return Text(
+                AppFormatUtils.toCurrencyString(
+                  value: controller.totalValue,
+                ),
+                style: TextStyle(
+                  fontSize: 15,
+                  color: Colors.white,
+                  fontWeight: FontWeight.w400,
+                ),
+              );
+            })
+          ],
+        ),
         backgroundColor: Colors.red[400],
         elevation: 0,
       ),
@@ -38,10 +56,6 @@ class _ExpensesScreenState extends State<ExpensesScreen> {
         child: Column(
           children: [
             MonthSelector(
-              availableHeight: _availableHeight,
-              controller: controller,
-            ),
-            TotalExpenseInformative(
               availableHeight: _availableHeight,
               controller: controller,
             ),
@@ -98,73 +112,6 @@ class MonthSelector extends StatelessWidget {
   }
 }
 
-class TotalExpenseInformative extends StatelessWidget {
-  const TotalExpenseInformative({
-    Key key,
-    @required double availableHeight,
-    @required this.controller,
-  })  : _availableHeight = availableHeight,
-        super(key: key);
-
-  final double _availableHeight;
-  final ExpensesController controller;
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      height: _availableHeight * 0.14,
-      width: double.infinity,
-      padding: const EdgeInsets.symmetric(horizontal: 5, vertical: 5),
-      child: Card(
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            Row(
-              children: [
-                Padding(
-                  padding: const EdgeInsets.all(15),
-                  child: Icon(
-                    Icons.account_balance_wallet,
-                    color: Colors.grey,
-                  ),
-                ),
-                Text(
-                  'Total',
-                  style: TextStyle(
-                    fontSize: 17,
-                    fontWeight: FontWeight.bold,
-                    color: Colors.grey,
-                  ),
-                ),
-              ],
-            ),
-            Padding(
-              padding: const EdgeInsets.all(15.0),
-              child: Observer(
-                builder: (_) {
-                  return controller.isBusy
-                      ? Center(
-                          child: CircularProgressIndicator(),
-                        )
-                      : Text(
-                          AppFormatUtils.toCurrencyString(
-                            value: controller.totalValue,
-                          ),
-                          style: TextStyle(
-                            fontSize: 16,
-                            color: Colors.grey[700],
-                          ),
-                        );
-                },
-              ),
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-}
-
 class ExpensesList extends StatelessWidget {
   const ExpensesList({
     Key key,
@@ -200,6 +147,12 @@ class ExpensesList extends StatelessWidget {
                             expense: controller.expensesList[index],
                             onPressDelete: () {
                               controller.deleteExpense(index);
+                            },
+                            onPressEdit: () {
+                              Navigator.of(context).pushNamed(
+                                AppRoutes.EXPENSES_FORM,
+                                arguments: controller.expensesList[index],
+                              );
                             },
                           ),
                           Divider(),

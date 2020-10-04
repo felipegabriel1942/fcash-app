@@ -39,6 +39,7 @@ abstract class _ExpensesControllerBase with Store {
   Future<void> deleteExpense(int index) async {
     try {
       await expensesRepository.deleteExpense(expensesList.elementAt(index));
+      totalValue = totalValue - expensesList.elementAt(index).value;
       expensesList.removeAt(index);
     } catch (e) {
       print(e);

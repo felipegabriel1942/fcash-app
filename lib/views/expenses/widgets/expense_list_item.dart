@@ -6,10 +6,12 @@ import 'package:intl/intl.dart';
 class ExpenseListItem extends StatelessWidget {
   final Expense expense;
   final Function onPressDelete;
+  final Function onPressEdit;
 
   ExpenseListItem({
     this.expense,
-    this.onPressDelete
+    this.onPressDelete,
+    this.onPressEdit,
   });
 
   @override
@@ -29,12 +31,25 @@ class ExpenseListItem extends StatelessWidget {
           ),
         ),
       ),
-      trailing: IconButton(
-        icon: Icon(
-          Icons.delete,
-          color: Colors.red,
+      trailing: Container(
+        width: 100,
+        child: Row(
+          children: [
+            IconButton(
+                icon: Icon(
+                  Icons.edit,
+                  color: Colors.blue,
+                ),
+                onPressed: onPressEdit),
+            IconButton(
+              icon: Icon(
+                Icons.delete,
+                color: Colors.red,
+              ),
+              onPressed: onPressDelete,
+            ),
+          ],
         ),
-        onPressed: onPressDelete,
       ),
       title: Column(
         mainAxisAlignment: MainAxisAlignment.start,

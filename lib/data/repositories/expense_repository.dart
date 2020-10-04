@@ -15,6 +15,10 @@ class ExpensesRepository {
     return localDataSource.deleteExpense(expense);
   }
 
+  Future<void> updateExpense(Expense expense) {
+    return localDataSource.updateExpense(expense);
+  }
+
   Future<List<Expense>> findAll() {
     return localDataSource.findAll();
   }

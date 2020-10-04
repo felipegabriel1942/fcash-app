@@ -61,6 +61,21 @@ mixin _$ExpensesFormController on _ExpensesFormControllerBase, Store {
     });
   }
 
+  final _$idAtom = Atom(name: '_ExpensesFormControllerBase.id');
+
+  @override
+  int get id {
+    _$idAtom.reportRead();
+    return super.id;
+  }
+
+  @override
+  set id(int value) {
+    _$idAtom.reportWrite(value, super.id, () {
+      super.id = value;
+    });
+  }
+
   final _$descriptionAtom =
       Atom(name: '_ExpensesFormControllerBase.description');
 
@@ -274,9 +289,21 @@ mixin _$ExpensesFormController on _ExpensesFormControllerBase, Store {
   }
 
   @override
+  void setExpense(Expense expense) {
+    final _$actionInfo = _$_ExpensesFormControllerBaseActionController
+        .startAction(name: '_ExpensesFormControllerBase.setExpense');
+    try {
+      return super.setExpense(expense);
+    } finally {
+      _$_ExpensesFormControllerBaseActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
   String toString() {
     return '''
 autovalidate: ${autovalidate},
+id: ${id},
 description: ${description},
 expenseValue: ${expenseValue},
 date: ${date},

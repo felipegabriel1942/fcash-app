@@ -8,6 +8,9 @@ abstract class ExpenseLocalDataSource<Entity extends Expense> {
   @insert
   Future<int> insertExpense(Expense expense);
 
+  @update
+  Future<int> updateExpense(Expense expense);
+
   @delete
   Future<int> deleteExpense(Expense expense);
 
