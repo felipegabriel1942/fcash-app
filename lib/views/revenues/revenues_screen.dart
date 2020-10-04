@@ -1,7 +1,7 @@
-import 'package:fcash_app/controllers/expenses/expenses_controller.dart';
+import 'package:fcash_app/controllers/revenues/revenues_controller.dart';
 import 'package:fcash_app/utils/app_format_utils.dart';
 import 'package:fcash_app/utils/app_routes.dart';
-import 'package:fcash_app/views/expenses/widgets/expense_list_item.dart';
+import 'package:fcash_app/views/revenues/widgets/revenue_list_item.dart';
 import 'package:fcash_app/widgets/app_drawer.dart';
 import 'package:fcash_app/widgets/custom_month_picker.dart';
 import 'package:fcash_app/widgets/empty_list_image.dart';
@@ -9,19 +9,19 @@ import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:get_it/get_it.dart';
 
-class ExpensesScreen extends StatefulWidget {
+class RevenuesScreen extends StatefulWidget {
   @override
-  _ExpensesScreenState createState() => _ExpensesScreenState();
+  _RevenuesScreenState createState() => _RevenuesScreenState();
 }
 
-class _ExpensesScreenState extends State<ExpensesScreen> {
-  final controller = GetIt.I<ExpensesController>();
+class _RevenuesScreenState extends State<RevenuesScreen> {
+  final controller = GetIt.I<RevenuesController>();
 
   @override
   void initState() {
     super.initState();
-    if (controller.expensesList.isEmpty) {
-      controller.loadExpenses();
+    if (controller.revenuesList.isEmpty) {
+      controller.loadRevenues();
     }
   }
 
@@ -32,12 +32,13 @@ class _ExpensesScreenState extends State<ExpensesScreen> {
         56;
 
     return Scaffold(
+      drawer: AppDrawer(),
       appBar: AppBar(
         title: Column(
           mainAxisAlignment: MainAxisAlignment.end,
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
-            Text('Despesas'),
+            Text('Receitas'),
             Observer(builder: (_) {
               return Text(
                 AppFormatUtils.toCurrencyString(
@@ -52,7 +53,7 @@ class _ExpensesScreenState extends State<ExpensesScreen> {
             })
           ],
         ),
-        backgroundColor: Colors.red[400],
+        backgroundColor: Colors.green,
         elevation: 0,
       ),
       body: SingleChildScrollView(
@@ -62,14 +63,13 @@ class _ExpensesScreenState extends State<ExpensesScreen> {
               availableHeight: _availableHeight,
               controller: controller,
             ),
-            ExpensesList(
+            RevenuesList(
               availableHeight: _availableHeight,
               controller: controller,
             )
           ],
         ),
       ),
-      drawer: AppDrawer(),
       floatingActionButton: FloatingActionButton(
         child: Icon(
           Icons.add,
@@ -77,7 +77,7 @@ class _ExpensesScreenState extends State<ExpensesScreen> {
         ),
         backgroundColor: Colors.amber[600],
         onPressed: () {
-          Navigator.of(context).pushNamed(AppRoutes.EXPENSES_FORM);
+          Navigator.of(context).pushNamed(AppRoutes.REVENUES_FORM);
         },
       ),
     );
@@ -93,13 +93,13 @@ class MonthSelector extends StatelessWidget {
         super(key: key);
 
   final double _availableHeight;
-  final ExpensesController controller;
+  final RevenuesController controller;
 
   @override
   Widget build(BuildContext context) {
     return Container(
       decoration: BoxDecoration(
-        color: Colors.red[400],
+        color: Colors.green,
       ),
       height: _availableHeight * 0.08,
       child: Observer(
@@ -115,8 +115,8 @@ class MonthSelector extends StatelessWidget {
   }
 }
 
-class ExpensesList extends StatelessWidget {
-  const ExpensesList({
+class RevenuesList extends StatelessWidget {
+  const RevenuesList({
     Key key,
     @required double availableHeight,
     @required this.controller,
@@ -124,7 +124,7 @@ class ExpensesList extends StatelessWidget {
         super(key: key);
 
   final double _availableHeight;
-  final ExpensesController controller;
+  final RevenuesController controller;
 
   @override
   Widget build(BuildContext context) {
@@ -139,21 +139,21 @@ class ExpensesList extends StatelessWidget {
               ? Center(
                   child: CircularProgressIndicator(),
                 )
-              : controller.expensesList.length == 0
+              : controller.revenuesList.length == 0
                   ? EmptyListImage()
                   : ListView.builder(
-                      itemCount: controller.expensesList.length,
+                      itemCount: controller.revenuesList.length,
                       itemBuilder: (_, index) => Column(
                         children: [
-                          ExpenseListItem(
-                            expense: controller.expensesList[index],
+                          RevenueListItem(
+                            revenue: controller.revenuesList[index],
                             onPressDelete: () {
-                              controller.deleteExpense(index);
+                              controller.deleteRevenue(index);
                             },
                             onPressEdit: () {
                               Navigator.of(context).pushNamed(
-                                AppRoutes.EXPENSES_FORM,
-                                arguments: controller.expensesList[index],
+                                AppRoutes.REVENUES_FORM,
+                                arguments: controller.revenuesList[index],
                               );
                             },
                           ),

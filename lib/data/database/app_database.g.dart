@@ -62,6 +62,8 @@ class _$AppDatabase extends AppDatabase {
 
   ExpenseLocalDataSource _expenseLocalDataSourceInstance;
 
+  RevenueLocalDataSource _revenueLocalDataSourceInstance;
+
   Future<sqflite.Database> open(String path, List<Migration> migrations,
       [Callback callback]) async {
     final databaseOptions = sqflite.OpenDatabaseOptions(
@@ -81,6 +83,8 @@ class _$AppDatabase extends AppDatabase {
       onCreate: (database, version) async {
         await database.execute(
             'CREATE TABLE IF NOT EXISTS `Expense` (`id` INTEGER PRIMARY KEY AUTOINCREMENT, `description` TEXT, `value` REAL, `date` TEXT, `categorie` TEXT, `observation` TEXT)');
+        await database.execute(
+            'CREATE TABLE IF NOT EXISTS `Revenue` (`id` INTEGER PRIMARY KEY AUTOINCREMENT, `description` TEXT, `value` REAL, `date` TEXT, `categorie` TEXT, `observation` TEXT)');
 
         await callback?.onCreate?.call(database, version);
       },
@@ -92,6 +96,12 @@ class _$AppDatabase extends AppDatabase {
   ExpenseLocalDataSource get expenseLocalDataSource {
     return _expenseLocalDataSourceInstance ??=
         _$ExpenseLocalDataSource(database, changeListener);
+  }
+
+  @override
+  RevenueLocalDataSource get revenueLocalDataSource {
+    return _revenueLocalDataSourceInstance ??=
+        _$RevenueLocalDataSource(database, changeListener);
   }
 }
 
@@ -181,5 +191,94 @@ class _$ExpenseLocalDataSource extends ExpenseLocalDataSource {
   @override
   Future<int> deleteExpense(Expense expense) {
     return _expenseDeletionAdapter.deleteAndReturnChangedRows(expense);
+  }
+}
+
+class _$RevenueLocalDataSource extends RevenueLocalDataSource {
+  _$RevenueLocalDataSource(this.database, this.changeListener)
+      : _queryAdapter = QueryAdapter(database),
+        _revenueInsertionAdapter = InsertionAdapter(
+            database,
+            'Revenue',
+            (Revenue item) => <String, dynamic>{
+                  'id': item.id,
+                  'description': item.description,
+                  'value': item.value,
+                  'date': item.date,
+                  'categorie': item.categorie,
+                  'observation': item.observation
+                }),
+        _revenueUpdateAdapter = UpdateAdapter(
+            database,
+            'Revenue',
+            ['id'],
+            (Revenue item) => <String, dynamic>{
+                  'id': item.id,
+                  'description': item.description,
+                  'value': item.value,
+                  'date': item.date,
+                  'categorie': item.categorie,
+                  'observation': item.observation
+                }),
+        _revenueDeletionAdapter = DeletionAdapter(
+            database,
+            'Revenue',
+            ['id'],
+            (Revenue item) => <String, dynamic>{
+                  'id': item.id,
+                  'description': item.description,
+                  'value': item.value,
+                  'date': item.date,
+                  'categorie': item.categorie,
+                  'observation': item.observation
+                });
+
+  final sqflite.DatabaseExecutor database;
+
+  final StreamController<String> changeListener;
+
+  final QueryAdapter _queryAdapter;
+
+  static final _revenueMapper = (Map<String, dynamic> row) => Revenue(
+      id: row['id'] as int,
+      description: row['description'] as String,
+      value: row['value'] as double,
+      date: row['date'] as String,
+      categorie: row['categorie'] as String,
+      observation: row['observation'] as String);
+
+  final InsertionAdapter<Revenue> _revenueInsertionAdapter;
+
+  final UpdateAdapter<Revenue> _revenueUpdateAdapter;
+
+  final DeletionAdapter<Revenue> _revenueDeletionAdapter;
+
+  @override
+  Future<List<Revenue>> findAll() async {
+    return _queryAdapter.queryList('SELECT * FROM Revenue',
+        mapper: _revenueMapper);
+  }
+
+  @override
+  Future<Revenue> findById(int id) async {
+    return _queryAdapter.query('SELECT * FROM Revenue WHERE id = ?',
+        arguments: <dynamic>[id], mapper: _revenueMapper);
+  }
+
+  @override
+  Future<int> insertRevenue(Revenue revenue) {
+    return _revenueInsertionAdapter.insertAndReturnId(
+        revenue, OnConflictStrategy.abort);
+  }
+
+  @override
+  Future<int> updateRevenue(Revenue revenue) {
+    return _revenueUpdateAdapter.updateAndReturnChangedRows(
+        revenue, OnConflictStrategy.abort);
+  }
+
+  @override
+  Future<int> deleteRevenue(Revenue revenue) {
+    return _revenueDeletionAdapter.deleteAndReturnChangedRows(revenue);
   }
 }

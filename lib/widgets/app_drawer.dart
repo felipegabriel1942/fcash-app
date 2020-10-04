@@ -36,7 +36,9 @@ class AppDrawer extends StatelessWidget {
               Icons.monetization_on,
             ),
             title: Text('Receitas'),
-            onTap: () {},
+            onTap: () {
+              Navigator.of(context).pushReplacementNamed(AppRoutes.REVENUES);
+            },
           ),
           Divider(),
         ],
