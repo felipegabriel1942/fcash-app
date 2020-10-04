@@ -1,5 +1,7 @@
+import 'package:fcash_app/controllers/expenses/expenses_controller.dart';
 import 'package:fcash_app/data/models/expense.dart';
 import 'package:fcash_app/data/repositories/expense_repository.dart';
+import 'package:get_it/get_it.dart';
 import 'package:mobx/mobx.dart';
 part 'expenses_form_controller.g.dart';
 
@@ -8,6 +10,7 @@ class ExpensesFormController = _ExpensesFormControllerBase with _$ExpensesFormCo
 abstract class _ExpensesFormControllerBase with Store {
 
   final expensesRepository = ExpensesRepository();
+  final expensesController = GetIt.I<ExpensesController>();
 
   @observable
   bool autovalidate = false;
@@ -113,6 +116,7 @@ abstract class _ExpensesFormControllerBase with Store {
     
     try {
       await expensesRepository.insertExpense(newExpense);
+      expensesController.loadExpenses();
       isFormSaved = true;
     } catch (e) {
       print(e);

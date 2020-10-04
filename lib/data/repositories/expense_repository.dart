@@ -18,4 +18,8 @@ class ExpensesRepository {
   Future<List<Expense>> findAll() {
     return localDataSource.findAll();
   }
+
+  Future<Expense> findById(int id) {
+    return localDataSource.findById(id);
+  }
 }

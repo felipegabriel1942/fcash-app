@@ -147,6 +147,12 @@ class _$ExpenseLocalDataSource extends ExpenseLocalDataSource {
   }
 
   @override
+  Future<Expense> findById(int id) async {
+    return _queryAdapter.query('SELECT * FROM Expense WHERE id = ?',
+        arguments: <dynamic>[id], mapper: _expenseMapper);
+  }
+
+  @override
   Future<int> insertExpense(Expense expense) {
     return _expenseInsertionAdapter.insertAndReturnId(
         expense, OnConflictStrategy.abort);

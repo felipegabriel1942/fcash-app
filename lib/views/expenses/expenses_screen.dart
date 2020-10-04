@@ -6,6 +6,7 @@ import 'package:fcash_app/widgets/app_drawer.dart';
 import 'package:fcash_app/widgets/custom_month_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
+import 'package:get_it/get_it.dart';
 
 class ExpensesScreen extends StatefulWidget {
   @override
@@ -13,7 +14,7 @@ class ExpensesScreen extends StatefulWidget {
 }
 
 class _ExpensesScreenState extends State<ExpensesScreen> {
-  final controller = ExpensesController();
+  final controller = GetIt.I<ExpensesController>();
 
   @override
   void initState() {
@@ -197,6 +198,9 @@ class ExpensesList extends StatelessWidget {
                         children: [
                           ExpenseListItem(
                             expense: controller.expensesList[index],
+                            onPressDelete: () {
+                              controller.deleteExpense(index);
+                            },
                           ),
                           Divider(),
                         ],

@@ -1,3 +1,4 @@
+import 'package:fcash_app/controllers/expenses/expenses_controller.dart';
 import 'package:fcash_app/data/database/app_database.dart';
 import 'package:fcash_app/utils/app_routes.dart';
 import 'package:fcash_app/views/expenses/expenses_form_screen.dart';
@@ -10,6 +11,7 @@ void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   AppDatabase db = await $FloorAppDatabase.databaseBuilder('fcash_database.db').build();
   GetIt.instance.registerSingleton<AppDatabase>(db);
+  GetIt.instance.registerSingleton<ExpensesController>(ExpensesController());
 
   runApp(MyApp());
 }

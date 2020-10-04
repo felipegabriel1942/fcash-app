@@ -5,9 +5,11 @@ import 'package:intl/intl.dart';
 
 class ExpenseListItem extends StatelessWidget {
   final Expense expense;
+  final Function onPressDelete;
 
   ExpenseListItem({
     this.expense,
+    this.onPressDelete
   });
 
   @override
@@ -32,7 +34,7 @@ class ExpenseListItem extends StatelessWidget {
           Icons.delete,
           color: Colors.red,
         ),
-        onPressed: () {},
+        onPressed: onPressDelete,
       ),
       title: Column(
         mainAxisAlignment: MainAxisAlignment.start,

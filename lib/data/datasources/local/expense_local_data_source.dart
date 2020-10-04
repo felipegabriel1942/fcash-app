@@ -13,4 +13,7 @@ abstract class ExpenseLocalDataSource<Entity extends Expense> {
 
   @Query('SELECT * FROM Expense')
   Future<List<Expense>> findAll();
+
+  @Query('SELECT * FROM Expense WHERE id = :id')
+  Future<Expense> findById(int id);
 }

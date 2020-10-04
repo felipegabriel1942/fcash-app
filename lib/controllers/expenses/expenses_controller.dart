@@ -7,7 +7,6 @@ part 'expenses_controller.g.dart';
 class ExpensesController = _ExpensesControllerBase with _$ExpensesController;
 
 abstract class _ExpensesControllerBase with Store {
-
   final expensesRepository = ExpensesRepository();
 
   @observable
@@ -37,6 +36,17 @@ abstract class _ExpensesControllerBase with Store {
     this.loadExpenses();
   }
 
+  Future<void> deleteExpense(int index) async {
+    try {
+      await expensesRepository.deleteExpense(expensesList.elementAt(index));
+      expensesList.removeAt(index);
+    } catch (e) {
+      print(e);
+    } finally {
+      isBusy = false;
+    }
+  }
+
   Future<void> loadExpenses() async {
     try {
       isBusy = true;
@@ -49,6 +59,7 @@ abstract class _ExpensesControllerBase with Store {
         value.forEach((element) {
           if (DateTime.parse(element.date).month == selectedMonth.month) {
             final expense = Expense(
+                id: element.id,
                 description: element.description,
                 date: element.date,
                 value: element.value,
