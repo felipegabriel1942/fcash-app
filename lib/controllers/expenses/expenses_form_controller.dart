@@ -1,10 +1,15 @@
+import 'package:fcash_app/data/models/expense.dart';
+import 'package:fcash_app/data/repositories/expense_repository.dart';
 import 'package:mobx/mobx.dart';
 part 'expenses_form_controller.g.dart';
 
 class ExpensesFormController = _ExpensesFormControllerBase with _$ExpensesFormController;
 
 abstract class _ExpensesFormControllerBase with Store {
-   @observable
+
+  final expensesRepository = ExpensesRepository();
+
+  @observable
   bool autovalidate = false;
 
   void setAutovalidate() => autovalidate = !autovalidate;
@@ -98,20 +103,20 @@ abstract class _ExpensesFormControllerBase with Store {
 
     isBusy = true;
 
-    // final newExpense = Expense(
-    //   description: description,
-    //   value: double.parse(expenseValue),
-    //   date: date,
-    //   categorie: categorie,
-    //   observation: observation
-    // );
+    final newExpense = Expense(
+      description: description,
+      value: double.parse(expenseValue),
+      date: date.toIso8601String(),
+      categorie: categorie,
+      observation: observation
+    );
     
-    // try {
-    //   await ExpensesRepository().saveExpense(newExpense);
-    //   isFormSaved = true;
-    // } catch (e) {
-    //   print(e);
-    // }
+    try {
+      await expensesRepository.insertExpense(newExpense);
+      isFormSaved = true;
+    } catch (e) {
+      print(e);
+    }
 
     isBusy = false;
   }

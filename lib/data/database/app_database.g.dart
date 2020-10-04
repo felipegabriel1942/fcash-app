@@ -97,7 +97,8 @@ class _$AppDatabase extends AppDatabase {
 
 class _$ExpenseLocalDataSource extends ExpenseLocalDataSource {
   _$ExpenseLocalDataSource(this.database, this.changeListener)
-      : _expenseInsertionAdapter = InsertionAdapter(
+      : _queryAdapter = QueryAdapter(database),
+        _expenseInsertionAdapter = InsertionAdapter(
             database,
             'Expense',
             (Expense item) => <String, dynamic>{
@@ -125,9 +126,25 @@ class _$ExpenseLocalDataSource extends ExpenseLocalDataSource {
 
   final StreamController<String> changeListener;
 
+  final QueryAdapter _queryAdapter;
+
+  static final _expenseMapper = (Map<String, dynamic> row) => Expense(
+      id: row['id'] as int,
+      description: row['description'] as String,
+      value: row['value'] as double,
+      date: row['date'] as String,
+      categorie: row['categorie'] as String,
+      observation: row['observation'] as String);
+
   final InsertionAdapter<Expense> _expenseInsertionAdapter;
 
   final DeletionAdapter<Expense> _expenseDeletionAdapter;
+
+  @override
+  Future<List<Expense>> findAll() async {
+    return _queryAdapter.queryList('SELECT * FROM Expense',
+        mapper: _expenseMapper);
+  }
 
   @override
   Future<int> insertExpense(Expense expense) {

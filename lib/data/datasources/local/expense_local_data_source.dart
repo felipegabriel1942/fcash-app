@@ -10,4 +10,7 @@ abstract class ExpenseLocalDataSource<Entity extends Expense> {
 
   @delete
   Future<int> deleteExpense(Expense expense);
+
+  @Query('SELECT * FROM Expense')
+  Future<List<Expense>> findAll();
 }
