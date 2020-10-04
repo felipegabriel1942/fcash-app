@@ -128,10 +128,9 @@ class ExpensesList extends StatelessWidget {
     return Observer(
       builder: (_) {
         return Container(
-          height: _availableHeight * 0.78,
+          height: _availableHeight * 0.92,
           padding: const EdgeInsets.only(
             bottom: 45,
-            top: 10,
           ),
           child: controller.isBusy
               ? Center(

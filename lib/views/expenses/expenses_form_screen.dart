@@ -159,6 +159,48 @@ class _ExpensesFormScreenState extends State<ExpensesFormScreen> {
                                     'Alimentação',
                                   ),
                                   value: 'alimentacao',
+                                ),
+                                DropdownMenuItem(
+                                  child: Text(
+                                    'Educação',
+                                  ),
+                                  value: 'educacao',
+                                ),
+                                DropdownMenuItem(
+                                  child: Text(
+                                    'Lazer',
+                                  ),
+                                  value: 'lazer',
+                                ),
+                                DropdownMenuItem(
+                                  child: Text(
+                                    'Moradia',
+                                  ),
+                                  value: 'moradia',
+                                ),
+                                DropdownMenuItem(
+                                  child: Text(
+                                    'Pagamentos',
+                                  ),
+                                  value: 'pagamentos',
+                                ),
+                                DropdownMenuItem(
+                                  child: Text(
+                                    'Roupa',
+                                  ),
+                                  value: 'roupa',
+                                ),
+                                DropdownMenuItem(
+                                  child: Text(
+                                    'Saúde',
+                                  ),
+                                  value: 'saude',
+                                ),
+                                DropdownMenuItem(
+                                  child: Text(
+                                    'Transporte',
+                                  ),
+                                  value: 'transporte',
                                 )
                               ],
                               onChanged: controller.setCategorie,

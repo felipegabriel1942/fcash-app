@@ -2,6 +2,7 @@ import 'package:fcash_app/data/models/expense.dart';
 import 'package:fcash_app/utils/app_format_utils.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 
 class ExpenseListItem extends StatelessWidget {
   final Expense expense;
@@ -14,6 +15,69 @@ class ExpenseListItem extends StatelessWidget {
     this.onPressEdit,
   });
 
+  Icon _setIcon() {
+    if (expense.categorie.contains('alimentacao')) {
+      return Icon(
+        Icons.fastfood,
+        color: Colors.white,
+      );
+    }
+
+    if (expense.categorie.contains('educacao')) {
+      return Icon(
+        Icons.school,
+        color: Colors.white,
+      );
+    }
+
+    if (expense.categorie.contains('lazer')) {
+      return Icon(
+        Icons.beach_access,
+        color: Colors.white,
+      );
+    }
+
+    if (expense.categorie.contains('moradia')) {
+      return Icon(
+        Icons.home,
+        color: Colors.white,
+      );
+    }
+
+    if (expense.categorie.contains('pagamentos')) {
+      return Icon(
+        Icons.payment,
+        color: Colors.white,
+      );
+    }
+
+    if (expense.categorie.contains('roupa')) {
+      return Icon(
+        MdiIcons.shopping,
+        color: Colors.white,
+      );
+    }
+
+    if (expense.categorie.contains('saude')) {
+      return Icon(
+        MdiIcons.medicalBag,
+        color: Colors.white,
+      );
+    }
+
+    if (expense.categorie.contains('transporte')) {
+      return Icon(
+        MdiIcons.car,
+        color: Colors.white,
+      );
+    }
+
+    return Icon(
+      Icons.sentiment_dissatisfied,
+      color: Colors.white,
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return ListTile(
@@ -24,10 +88,7 @@ class ExpenseListItem extends StatelessWidget {
         child: Padding(
           padding: const EdgeInsets.all(6.0),
           child: FittedBox(
-            child: Icon(
-              Icons.fastfood,
-              color: Colors.white,
-            ),
+            child: _setIcon(),
           ),
         ),
       ),
