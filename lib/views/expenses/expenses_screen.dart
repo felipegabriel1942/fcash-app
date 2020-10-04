@@ -19,7 +19,9 @@ class _ExpensesScreenState extends State<ExpensesScreen> {
   @override
   void initState() {
     super.initState();
-    controller.loadExpenses();
+    if (controller.expensesList.isEmpty) {
+      controller.loadExpenses();
+    }
   }
 
   @override
