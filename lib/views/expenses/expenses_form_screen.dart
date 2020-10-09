@@ -87,11 +87,11 @@ class _ExpensesFormScreenState extends State<ExpensesFormScreen> {
                             child: TextFormField(
                               initialValue: controller.description,
                               autovalidate: controller.autovalidate,
+                              validator: controller.descriptionValidation,
+                              onChanged: controller.setDescription,
                               decoration: InputDecoration(
                                 labelText: 'Descrição',
                               ),
-                              validator: controller.descriptionValidation,
-                              onChanged: controller.setDescription,
                             ),
                           );
                         },
