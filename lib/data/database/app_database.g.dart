@@ -89,7 +89,7 @@ class _$AppDatabase extends AppDatabase {
             'CREATE TABLE IF NOT EXISTS `Revenue` (`id` INTEGER PRIMARY KEY AUTOINCREMENT, `description` TEXT, `value` REAL, `date` TEXT, `categorie` TEXT, `observation` TEXT)');
 
         await database.execute(
-            '''CREATE VIEW IF NOT EXISTS `expenseByCategory` AS SELECT categorie AS category, SUM(value) AS value FROM Expense WHERE strftime("%m", date) = :month and strftime("%Y", date) = :year GROUP BY categorie ''');
+            '''CREATE VIEW IF NOT EXISTS `expenseByCategory` AS SELECT categorie AS category, SUM(value) AS value FROM Expense GROUP BY categorie ''');
 
         await callback?.onCreate?.call(database, version);
       },

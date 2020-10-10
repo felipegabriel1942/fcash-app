@@ -1,7 +1,6 @@
-import 'package:fcash_app/data/querys/querys.dart';
 import 'package:floor/floor.dart';
 
-@DatabaseView(Querys.EXPENSES_BY_CATEGORY, viewName: 'expenseByCategory')
+@DatabaseView('SELECT categorie AS category, SUM(value) AS value FROM Expense GROUP BY categorie ', viewName: 'expenseByCategory')
 class ExpenseByCategory {
   String category;
   double value;

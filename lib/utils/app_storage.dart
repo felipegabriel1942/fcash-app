@@ -35,11 +35,19 @@ class AppStorage {
 
   static Future<String> getUserImage() async {
     Map<String, dynamic> map = await AppStorage.getMap('userImage');
+
+    if(map == null) {
+      return Future.value();
+    }
+
     return Future.value(map['userImage']);
   }
 
   static Future<String> getUserName() async {
     Map<String, dynamic> map = await AppStorage.getMap('userName');
+    if(map == null) {
+      return Future.value();
+    }
     return Future.value(map['userName']);
   }
 }
