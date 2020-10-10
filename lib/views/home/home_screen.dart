@@ -1,4 +1,5 @@
 import 'package:fcash_app/controllers/home/home_controller.dart';
+import 'package:fcash_app/utils/app_format_utils.dart';
 import 'package:fcash_app/widgets/app_drawer.dart';
 import 'package:fcash_app/widgets/custom_month_picker.dart';
 import 'package:flutter/material.dart';
@@ -12,6 +13,20 @@ class HomeScreen extends StatefulWidget {
 
 class _HomeScreenState extends State<HomeScreen> {
   final controller = HomeController();
+
+  @override
+  void initState() {
+    if (controller.expensesList.isEmpty) {
+      controller.loadExpenses();
+    }
+
+    if (controller.revenuesList.isEmpty) {
+      controller.loadRevenues();
+    }
+
+    controller.loadExpensesByCategory();
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -32,7 +47,7 @@ class _HomeScreenState extends State<HomeScreen> {
               controller: controller,
             ),
             Container(
-              height: 200,
+              height: 240,
               padding: const EdgeInsets.symmetric(
                 horizontal: 15,
                 vertical: 10,
@@ -44,10 +59,10 @@ class _HomeScreenState extends State<HomeScreen> {
                   children: [
                     Container(
                       padding: const EdgeInsets.only(
-                        bottom: 5,
+                        bottom: 10,
                         left: 23,
                         right: 23,
-                        top: 10,
+                        top: 15,
                       ),
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -66,33 +81,58 @@ class _HomeScreenState extends State<HomeScreen> {
                       indent: 15,
                       endIndent: 15,
                     ),
-                    CardItem(
-                      title: 'Receita',
-                      value: '1500',
-                      icon: Icons.add_box,
-                      color: Colors.green,
+                    Observer(
+                      builder: (_) {
+                        return CardItem(
+                          title: 'Receita',
+                          value: AppFormatUtils.toCurrencyString(
+                            value: controller.totalRevenueValue,
+                          ),
+                          icon: Icons.add_box,
+                          color: Colors.green,
+                        );
+                      },
                     ),
-                    CardItem(
-                      title: 'Despesa',
-                      value: '1000',
-                      icon: MdiIcons.minusBox,
-                      color: Colors.red[400],
+                    Divider(
+                      indent: 15,
+                      endIndent: 15,
                     ),
-                    CardItem(
-                      title: 'Resultado',
-                      value: '500',
-                      icon: MdiIcons.equalBox,
-                      color: Colors.blue[400],
+                    Observer(
+                      builder: (_) {
+                        return CardItem(
+                          title: 'Despesa',
+                          value: AppFormatUtils.toCurrencyString(
+                            value: controller.totalExpenseValue,
+                          ),
+                          icon: MdiIcons.minusBox,
+                          color: Colors.red[400],
+                        );
+                      },
                     ),
+                    Divider(
+                      indent: 15,
+                      endIndent: 15,
+                    ),
+                    Observer(
+                      builder: (_) {
+                        return CardItem(
+                          title: 'Resultado',
+                          value: AppFormatUtils.toCurrencyString(
+                            value: controller.totalResultValue,
+                          ),
+                          icon: MdiIcons.equalBox,
+                          color: Colors.blue[400],
+                        );
+                      },
+                    )
                   ],
                 ),
               ),
             ),
             Container(
-              height: 380,
+              height: 480,
               padding: const EdgeInsets.symmetric(
                 horizontal: 15,
-                vertical: 10,
               ),
               width: double.infinity,
               child: Card(
@@ -101,10 +141,10 @@ class _HomeScreenState extends State<HomeScreen> {
                   children: [
                     Container(
                       padding: const EdgeInsets.only(
-                        bottom: 5,
+                        bottom: 10,
                         left: 23,
                         right: 23,
-                        top: 10,
+                        top: 15,
                       ),
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -123,45 +163,121 @@ class _HomeScreenState extends State<HomeScreen> {
                       indent: 15,
                       endIndent: 15,
                     ),
-                    CardItem(
-                      title: 'Alimentação',
-                      value: '300',
-                      icon: Icons.fastfood,
+                    Observer(
+                      builder: (_) {
+                        return CardItem(
+                          title: 'Alimentação',
+                          value: AppFormatUtils.toCurrencyString(
+                            value: controller.alimentacaoTotalValue,
+                          ),
+                          icon: Icons.fastfood,
+                        );
+                      },
                     ),
-                    CardItem(
-                      title: 'Educação',
-                      value: '250',
-                      icon: Icons.school,
+                    Divider(
+                      indent: 15,
+                      endIndent: 15,
                     ),
-                    CardItem(
-                      title: 'Lazer',
-                      value: '130',
-                      icon: Icons.beach_access,
+                    Observer(
+                      builder: (_) {
+                        return CardItem(
+                          title: 'Educação',
+                          value: AppFormatUtils.toCurrencyString(
+                            value: controller.educacaoTotalValue,
+                          ),
+                          icon: Icons.school,
+                        );
+                      },
                     ),
-                    CardItem(
-                      title: 'Moradia',
-                      value: '50',
-                      icon: Icons.home,
+                    Divider(
+                      indent: 15,
+                      endIndent: 15,
                     ),
-                    CardItem(
-                      title: 'Pagamentos',
-                      value: '130',
-                      icon: Icons.payment,
+                    Observer(
+                      builder: (_) {
+                        return CardItem(
+                          title: 'Lazer',
+                          value: AppFormatUtils.toCurrencyString(
+                            value: controller.lazerTotalValue,
+                          ),
+                          icon: Icons.beach_access,
+                        );
+                      },
                     ),
-                    CardItem(
-                      title: 'Roupa',
-                      value: '265',
-                      icon: MdiIcons.shopping,
+                    Divider(
+                      indent: 15,
+                      endIndent: 15,
                     ),
-                    CardItem(
-                      title: 'Saúde',
-                      value: '132',
-                      icon: MdiIcons.medicalBag,
+                    Observer(
+                      builder: (_) {
+                        return CardItem(
+                          title: 'Moradia',
+                          value: AppFormatUtils.toCurrencyString(
+                            value: controller.moradiaTotalValue,
+                          ),
+                          icon: Icons.home,
+                        );
+                      },
                     ),
-                    CardItem(
-                      title: 'Transporte',
-                      value: '156',
-                      icon: MdiIcons.car,
+                    Divider(
+                      indent: 15,
+                      endIndent: 15,
+                    ),
+                    Observer(
+                      builder: (_) {
+                        return CardItem(
+                          title: 'Pagamentos',
+                          value: AppFormatUtils.toCurrencyString(
+                            value: controller.pagamentosTotalValue,
+                          ),
+                          icon: Icons.payment,
+                        );
+                      },
+                    ),
+                    Divider(
+                      indent: 15,
+                      endIndent: 15,
+                    ),
+                    Observer(
+                      builder: (_) {
+                        return CardItem(
+                          title: 'Roupa',
+                          value: AppFormatUtils.toCurrencyString(
+                            value: controller.roupaTotalValue,
+                          ),
+                          icon: MdiIcons.shopping,
+                        );
+                      },
+                    ),
+                    Divider(
+                      indent: 15,
+                      endIndent: 15,
+                    ),
+                    Observer(
+                      builder: (_) {
+                        return CardItem(
+                          title: 'Saúde',
+                          value: AppFormatUtils.toCurrencyString(
+                            value: controller.saudeTotalValue,
+                          ),
+                          icon: MdiIcons.medicalBag,
+                        );
+                      },
+                    ),
+                    Divider(
+                      indent: 15,
+                      endIndent: 15,
+                    ),
+                    Observer(
+                      builder: (_) {
+                        return CardItem(
+                          title: 'Transporte',
+                          value: AppFormatUtils.toCurrencyString(
+                            value: controller.transporteTotalValue,
+                          ),
+                          icon: MdiIcons.car,
+                        );
+                      },
                     ),
                   ],
                 ),
@@ -211,7 +327,12 @@ class CardItem extends StatelessWidget {
               ),
             ],
           ),
-          Text('R\$ $value'),
+          Text(
+            '$value',
+            style: TextStyle(
+              color: value.contains('-') ? Colors.red : Colors.black,
+            ),
+          ),
         ],
       ),
     );
@@ -239,8 +360,8 @@ class MonthSelector extends StatelessWidget {
       child: Observer(
         builder: (_) {
           return CustomMonthPicker(
-            onDecrease: controller.increaseMonth,
-            onIncrease: controller.decreaseMonth,
+            onDecrease: controller.decreaseMonth,
+            onIncrease: controller.increaseMonth,
             selectedMonth: controller.selectedMonth,
           );
         },

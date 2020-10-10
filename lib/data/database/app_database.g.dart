@@ -64,6 +64,8 @@ class _$AppDatabase extends AppDatabase {
 
   RevenueLocalDataSource _revenueLocalDataSourceInstance;
 
+  ExpenseByCategoryDataSource _expenseByCategoryDataSourceInstance;
+
   Future<sqflite.Database> open(String path, List<Migration> migrations,
       [Callback callback]) async {
     final databaseOptions = sqflite.OpenDatabaseOptions(
@@ -86,6 +88,9 @@ class _$AppDatabase extends AppDatabase {
         await database.execute(
             'CREATE TABLE IF NOT EXISTS `Revenue` (`id` INTEGER PRIMARY KEY AUTOINCREMENT, `description` TEXT, `value` REAL, `date` TEXT, `categorie` TEXT, `observation` TEXT)');
 
+        await database.execute(
+            '''CREATE VIEW IF NOT EXISTS `expenseByCategory` AS SELECT categorie AS category, SUM(value) AS value FROM Expense WHERE strftime("%m", date) = :month and strftime("%Y", date) = :year GROUP BY categorie ''');
+
         await callback?.onCreate?.call(database, version);
       },
     );
@@ -102,6 +107,12 @@ class _$AppDatabase extends AppDatabase {
   RevenueLocalDataSource get revenueLocalDataSource {
     return _revenueLocalDataSourceInstance ??=
         _$RevenueLocalDataSource(database, changeListener);
+  }
+
+  @override
+  ExpenseByCategoryDataSource get expenseByCategoryDataSource {
+    return _expenseByCategoryDataSourceInstance ??=
+        _$ExpenseByCategoryDataSource(database, changeListener);
   }
 }
 
@@ -280,5 +291,29 @@ class _$RevenueLocalDataSource extends RevenueLocalDataSource {
   @override
   Future<int> deleteRevenue(Revenue revenue) {
     return _revenueDeletionAdapter.deleteAndReturnChangedRows(revenue);
+  }
+}
+
+class _$ExpenseByCategoryDataSource extends ExpenseByCategoryDataSource {
+  _$ExpenseByCategoryDataSource(this.database, this.changeListener)
+      : _queryAdapter = QueryAdapter(database);
+
+  final sqflite.DatabaseExecutor database;
+
+  final StreamController<String> changeListener;
+
+  final QueryAdapter _queryAdapter;
+
+  static final _expenseByCategoryMapper = (Map<String, dynamic> row) =>
+      ExpenseByCategory(
+          category: row['category'] as String, value: row['value'] as double);
+
+  @override
+  Future<List<ExpenseByCategory>> getExpensesByCategory(
+      String month, String year) async {
+    return _queryAdapter.queryList(
+        'SELECT categorie AS category, SUM(value) AS value FROM Expense WHERE strftime("%m", date) = ? and strftime("%Y", date) = ? GROUP BY categorie',
+        arguments: <dynamic>[month, year],
+        mapper: _expenseByCategoryMapper);
   }
 }
