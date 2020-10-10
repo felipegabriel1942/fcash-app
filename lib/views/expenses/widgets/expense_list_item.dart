@@ -116,7 +116,7 @@ class ExpenseListItem extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.start,
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text('R\$ ${AppFormatUtils.toCurrencyString(
+          Text('${AppFormatUtils.toCurrencyString(
             value: expense.value,
           )}'),
           Text(
