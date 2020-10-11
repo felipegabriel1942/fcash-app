@@ -34,18 +34,26 @@ class _HomeScreenState extends State<HomeScreen> {
         MediaQuery.of(context).padding.top -
         56;
 
+    final _availableWidth = MediaQuery.of(context).size.width;
+
     return Scaffold(
       appBar: AppBar(
         elevation: 0,
+        title: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceAround,
+          children: [
+            MonthSelector(
+              availableHeight: _availableHeight,
+              availableWidth: _availableWidth,
+              controller: controller,
+            ),
+          ],
+        ),
       ),
       drawer: AppDrawer(),
       body: SingleChildScrollView(
         child: Column(
           children: [
-            MonthSelector(
-              availableHeight: _availableHeight,
-              controller: controller,
-            ),
             Container(
               height: 240,
               padding: const EdgeInsets.symmetric(
@@ -343,20 +351,21 @@ class MonthSelector extends StatelessWidget {
   const MonthSelector({
     Key key,
     @required double availableHeight,
+    @required double availableWidth,
     @required this.controller,
   })  : _availableHeight = availableHeight,
+        _availableWidth = availableWidth,
         super(key: key);
 
   final double _availableHeight;
+  final double _availableWidth;
   final HomeController controller;
 
   @override
   Widget build(BuildContext context) {
     return Container(
-      decoration: BoxDecoration(
-        color: Colors.blue[500],
-      ),
       height: _availableHeight * 0.08,
+      width: _availableWidth * 0.75,
       child: Observer(
         builder: (_) {
           return CustomMonthPicker(

@@ -31,42 +31,67 @@ class _ExpensesScreenState extends State<ExpensesScreen> {
         MediaQuery.of(context).padding.top -
         56;
 
+    final _availableWidth = MediaQuery.of(context).size.width;
+
     return Scaffold(
       appBar: AppBar(
-        title: Column(
-          mainAxisAlignment: MainAxisAlignment.end,
-          crossAxisAlignment: CrossAxisAlignment.stretch,
+        title: Row(
           children: [
-            Text('Despesas'),
-            Observer(builder: (_) {
-              return Text(
-                AppFormatUtils.toCurrencyString(
-                  value: controller.totalValue,
-                ),
-                style: TextStyle(
-                  fontSize: 15,
-                  color: Colors.white,
-                  fontWeight: FontWeight.w400,
-                ),
-              );
-            })
+            Container(
+              width: _availableWidth * 0.20,
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.end,
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: [
+                  Text(
+                    'Despesas',
+                    style: TextStyle(fontSize: 17),
+                  ),
+                  Observer(builder: (_) {
+                    return Text(
+                      AppFormatUtils.toCurrencyString(
+                        value: controller.totalValue,
+                      ),
+                      style: TextStyle(
+                        fontSize: 15,
+                        color: Colors.white,
+                        fontWeight: FontWeight.w400,
+                      ),
+                    );
+                  })
+                ],
+              ),
+            ),
+            Observer(
+              builder: (_) {
+                return Container(
+                  width: _availableWidth * 0.57,
+                  child: CustomMonthPicker(
+                    onDecrease:
+                        controller.isBusy ? null : controller.decreaseMonth,
+                    onIncrease:
+                        controller.isBusy ? null : controller.increaseMonth,
+                    selectedMonth: controller.selectedMonth,
+                  ),
+                );
+              },
+            )
           ],
         ),
         backgroundColor: Colors.red[400],
         elevation: 0,
       ),
       body: SingleChildScrollView(
-        child: Column(
-          children: [
-            MonthSelector(
-              availableHeight: _availableHeight,
-              controller: controller,
-            ),
-            ExpensesList(
-              availableHeight: _availableHeight,
-              controller: controller,
-            )
-          ],
+        child: Container(
+          width: double.infinity,
+          child: Column(
+            children: [
+              ExpensesList(
+                availableHeight: _availableHeight,
+                controller: controller,
+              )
+            ],
+          ),
         ),
       ),
       drawer: AppDrawer(),
@@ -78,37 +103,6 @@ class _ExpensesScreenState extends State<ExpensesScreen> {
         backgroundColor: Colors.amber[600],
         onPressed: () {
           Navigator.of(context).pushNamed(AppRoutes.EXPENSES_FORM);
-        },
-      ),
-    );
-  }
-}
-
-class MonthSelector extends StatelessWidget {
-  const MonthSelector({
-    Key key,
-    @required double availableHeight,
-    @required this.controller,
-  })  : _availableHeight = availableHeight,
-        super(key: key);
-
-  final double _availableHeight;
-  final ExpensesController controller;
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      decoration: BoxDecoration(
-        color: Colors.red[400],
-      ),
-      height: _availableHeight * 0.08,
-      child: Observer(
-        builder: (_) {
-          return CustomMonthPicker(
-            onDecrease: controller.isBusy ? null : controller.decreaseMonth,
-            onIncrease: controller.isBusy ? null : controller.increaseMonth,
-            selectedMonth: controller.selectedMonth,
-          );
         },
       ),
     );
