@@ -18,10 +18,8 @@ abstract class _AppDrawerControllerBase with Store {
   }
 
   Future<void> getUserName() async {
-    if (userName.isEmpty) {
-      var storeData = await AppStorage.getUserName();
-      userName = storeData == null ? 'Usuário' : storeData;
-    }
+    var storeData = await AppStorage.getUserName();
+    userName = storeData == null ? 'Usuário' : storeData;
   }
 
   @observable
