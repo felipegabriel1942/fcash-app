@@ -158,7 +158,7 @@ class _AppDrawerState extends State<AppDrawer> {
                   child: Align(
                     alignment: Alignment.bottomLeft,
                     child: Text(
-                      'Fcash (version: 1.0.0)',
+                      'Fcash (version: 1.0.1)',
                       style: TextStyle(fontWeight: FontWeight.bold),
                     ),
                   ),

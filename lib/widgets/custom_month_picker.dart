@@ -13,51 +13,51 @@ class CustomMonthPicker extends StatelessWidget {
 
   _buildMonthLabel(DateTime date) {
     if (date.month == 1) {
-      return 'Janeiro/${date.year}';
+      return 'Jan/${date.year}';
     }
 
     if (date.month == 2) {
-      return 'Fevereiro/${date.year}';
+      return 'Fev/${date.year}';
     }
 
     if (date.month == 3) {
-      return 'Março/${date.year}';
+      return 'Mar/${date.year}';
     }
 
     if (date.month == 4) {
-      return 'Abril/${date.year}';
+      return 'Abr/${date.year}';
     }
 
     if (date.month == 5) {
-      return 'Maio/${date.year}';
+      return 'Mai/${date.year}';
     }
 
     if (date.month == 6) {
-      return 'Junho/${date.year}';
+      return 'Jun/${date.year}';
     }
 
     if (date.month == 7) {
-      return 'Julho/${date.year}';
+      return 'Jul/${date.year}';
     }
 
     if (date.month == 8) {
-      return 'Agosto/${date.year}';
+      return 'Ago/${date.year}';
     }
 
     if (date.month == 9) {
-      return 'Setembro/${date.year}';
+      return 'Set/${date.year}';
     }
 
     if (date.month == 10) {
-      return 'Outubro/${date.year}';
+      return 'Out/${date.year}';
     }
 
     if (date.month == 11) {
-      return 'Novembro/${date.year}';
+      return 'Nov/${date.year}';
     }
 
     if (date.month == 12) {
-      return 'Dezembro/${date.year}';
+      return 'Dez/${date.year}';
     }
   }
 

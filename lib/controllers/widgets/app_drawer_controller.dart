@@ -37,7 +37,6 @@ abstract class _AppDrawerControllerBase with Store {
 
   Future<void> getUserImage() async {
     if(userImage.isEmpty) {
-      print(userImage);
       var storeData = await AppStorage.getUserImage();
       userImage = storeData == null ? '' : storeData;
     }

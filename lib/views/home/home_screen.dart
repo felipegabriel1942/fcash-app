@@ -41,14 +41,16 @@ class _HomeScreenState extends State<HomeScreen> {
         title: Row(
           mainAxisAlignment: MainAxisAlignment.spaceAround,
           children: [
-            Container(
-              width: _availableWidth * 0.77,
-              child: CustomMonthPicker(
-                onDecrease: controller.decreaseMonth,
-                onIncrease: controller.increaseMonth,
-                selectedMonth: controller.selectedMonth,
-              ),
-            )
+            Observer(builder: (_) {
+              return Container(
+                width: _availableWidth * 0.77,
+                child: CustomMonthPicker(
+                  onDecrease: controller.decreaseMonth,
+                  onIncrease: controller.increaseMonth,
+                  selectedMonth: controller.selectedMonth,
+                ),
+              );
+            }),
           ],
         ),
       ),
