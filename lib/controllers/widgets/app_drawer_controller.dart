@@ -5,7 +5,6 @@ part 'app_drawer_controller.g.dart';
 class AppDrawerController = _AppDrawerControllerBase with _$AppDrawerController;
 
 abstract class _AppDrawerControllerBase with Store {
-  
   @observable
   String userName = 'Usuário';
 
@@ -19,8 +18,10 @@ abstract class _AppDrawerControllerBase with Store {
   }
 
   Future<void> getUserName() async {
-    var storeData = await AppStorage.getUserName();
-    userName = storeData == null ? 'Usuário' : storeData;
+    if (userName.isEmpty) {
+      var storeData = await AppStorage.getUserName();
+      userName = storeData == null ? 'Usuário' : storeData;
+    }
   }
 
   @observable
@@ -29,16 +30,16 @@ abstract class _AppDrawerControllerBase with Store {
   @action
   Future<void> setUserImage(String value) async {
     userImage = value;
-
     await AppStorage.saveMap('userImage', {
       'userImage': userImage,
     });
   }
 
   Future<void> getUserImage() async {
-    var storeData = await AppStorage.getUserImage();
-    userImage = storeData == null ? '' : storeData;
-
+    if(userImage.isEmpty) {
+      print(userImage);
+      var storeData = await AppStorage.getUserImage();
+      userImage = storeData == null ? '' : storeData;
+    }
   }
-
 }

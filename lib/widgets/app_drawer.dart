@@ -5,6 +5,7 @@ import 'package:fcash_app/utils/app_routes.dart';
 import 'package:fcash_app/widgets/image_picker_dialog.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
+import 'package:get_it/get_it.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 
@@ -14,7 +15,7 @@ class AppDrawer extends StatefulWidget {
 }
 
 class _AppDrawerState extends State<AppDrawer> {
-  final controller = AppDrawerController();
+  final controller = GetIt.I<AppDrawerController>();
 
   @override
   void initState() {
