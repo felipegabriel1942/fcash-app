@@ -177,7 +177,7 @@ class _$ExpenseLocalDataSource extends ExpenseLocalDataSource {
 
   @override
   Future<List<Expense>> findAll() async {
-    return _queryAdapter.queryList('SELECT * FROM Expense',
+    return _queryAdapter.queryList('SELECT * FROM Expense ORDER BY id DESC',
         mapper: _expenseMapper);
   }
 
@@ -266,7 +266,7 @@ class _$RevenueLocalDataSource extends RevenueLocalDataSource {
 
   @override
   Future<List<Revenue>> findAll() async {
-    return _queryAdapter.queryList('SELECT * FROM Revenue',
+    return _queryAdapter.queryList('SELECT * FROM Revenue ORDER BY id DESC',
         mapper: _revenueMapper);
   }
 

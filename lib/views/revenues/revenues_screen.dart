@@ -81,8 +81,7 @@ class _RevenuesScreenState extends State<RevenuesScreen> {
             )
           ],
         ),
-        backgroundColor: Colors.green,
-        elevation: 0,
+        backgroundColor: Colors.green
       ),
       body: SingleChildScrollView(
         child: Container(
@@ -129,6 +128,7 @@ class RevenuesList extends StatelessWidget {
         return Container(
           height: _availableHeight * 0.92,
           padding: const EdgeInsets.only(
+            top: 15,
             bottom: 45,
           ),
           child: controller.isBusy

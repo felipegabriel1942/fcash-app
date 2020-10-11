@@ -14,7 +14,7 @@ abstract class ExpenseLocalDataSource<Entity extends Expense> {
   @delete
   Future<int> deleteExpense(Expense expense);
 
-  @Query('SELECT * FROM Expense')
+  @Query('SELECT * FROM Expense ORDER BY id DESC')
   Future<List<Expense>> findAll();
 
   @Query('SELECT * FROM Expense WHERE id = :id')

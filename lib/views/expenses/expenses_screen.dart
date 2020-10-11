@@ -79,7 +79,6 @@ class _ExpensesScreenState extends State<ExpensesScreen> {
           ],
         ),
         backgroundColor: Colors.red[400],
-        elevation: 0,
       ),
       body: SingleChildScrollView(
         child: Container(
@@ -127,6 +126,7 @@ class ExpensesList extends StatelessWidget {
         return Container(
           height: _availableHeight * 0.92,
           padding: const EdgeInsets.only(
+            top: 15,
             bottom: 45,
           ),
           child: controller.isBusy

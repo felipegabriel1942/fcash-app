@@ -13,7 +13,7 @@ abstract class RevenueLocalDataSource<Entity extends Revenue> {
   @delete
   Future<int> deleteRevenue(Revenue revenue);
 
-  @Query('SELECT * FROM Revenue')
+  @Query('SELECT * FROM Revenue ORDER BY id DESC')
   Future<List<Revenue>> findAll();
 
   @Query('SELECT * FROM Revenue WHERE id = :id')

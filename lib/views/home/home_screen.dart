@@ -38,15 +38,17 @@ class _HomeScreenState extends State<HomeScreen> {
 
     return Scaffold(
       appBar: AppBar(
-        elevation: 0,
         title: Row(
           mainAxisAlignment: MainAxisAlignment.spaceAround,
           children: [
-            MonthSelector(
-              availableHeight: _availableHeight,
-              availableWidth: _availableWidth,
-              controller: controller,
-            ),
+            Container(
+              width: _availableWidth * 0.77,
+              child: CustomMonthPicker(
+                onDecrease: controller.decreaseMonth,
+                onIncrease: controller.increaseMonth,
+                selectedMonth: controller.selectedMonth,
+              ),
+            )
           ],
         ),
       ),
@@ -342,38 +344,6 @@ class CardItem extends StatelessWidget {
             ),
           ),
         ],
-      ),
-    );
-  }
-}
-
-class MonthSelector extends StatelessWidget {
-  const MonthSelector({
-    Key key,
-    @required double availableHeight,
-    @required double availableWidth,
-    @required this.controller,
-  })  : _availableHeight = availableHeight,
-        _availableWidth = availableWidth,
-        super(key: key);
-
-  final double _availableHeight;
-  final double _availableWidth;
-  final HomeController controller;
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      height: _availableHeight * 0.08,
-      width: _availableWidth * 0.75,
-      child: Observer(
-        builder: (_) {
-          return CustomMonthPicker(
-            onDecrease: controller.decreaseMonth,
-            onIncrease: controller.increaseMonth,
-            selectedMonth: controller.selectedMonth,
-          );
-        },
       ),
     );
   }
