@@ -5,7 +5,8 @@ import 'package:get_it/get_it.dart';
 
 class ExpensesRepository {
 
-  final localDataSource = GetIt.I<AppDatabase>().expenseLocalDataSource;
+  final localDataSource = GetIt.I.get<AppDatabase>().expenseLocalDataSource;
+
 
   Future<void> insertExpense(Expense expense) {
     return localDataSource.insertExpense(expense);

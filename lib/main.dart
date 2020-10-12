@@ -13,12 +13,11 @@ import 'package:get_it/get_it.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  AppDatabase db =
-      await $FloorAppDatabase.databaseBuilder('fcash_database.db').build();
-  GetIt.instance.registerSingleton<AppDatabase>(db);
-  GetIt.instance.registerSingleton<ExpensesController>(ExpensesController());
-  GetIt.instance.registerSingleton<RevenuesController>(RevenuesController());
-  GetIt.instance.registerSingleton<AppDrawerController>(AppDrawerController());
+  GetIt getIt = GetIt.I;
+  getIt.registerSingleton<AppDatabase>(await $FloorAppDatabase.databaseBuilder('fcash_database.db').build());
+  getIt.registerSingleton<ExpensesController>(ExpensesController());
+  getIt.registerSingleton<RevenuesController>(RevenuesController());
+  getIt.registerSingleton<AppDrawerController>(AppDrawerController());
   runApp(MyApp());
 }
 
