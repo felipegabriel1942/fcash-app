@@ -8,13 +8,6 @@ void main() {
   ExpensesRepository repository;
   GetIt getIt = GetIt.I;
 
-  final expense = Expense(
-    id: 1,
-    date: '2020-10-12',
-    categorie: 'alimentacao',
-    value: 150,
-  );
-
   setUp(() async {
     TestWidgetsFlutterBinding.ensureInitialized();
 
@@ -30,22 +23,35 @@ void main() {
   });
 
   test('Should add a expense', () async {
-    await repository.insertExpense(expense);
+    await repository.insertExpense(Expense());
 
     List<Expense> lista = await repository.findAll();
 
     expect(lista.length, 1);
   });
 
-  test('Should delete a expense', () async {
-    await repository.insertExpense(expense);
+  
+  test('Should update a expense', () async {
+    await repository.insertExpense(Expense());
 
     List<Expense> lista = await repository.findAll();
 
-    await repository.deleteExpense(expense);
+    await repository.deleteExpense(lista.elementAt(0));
 
     lista = await repository.findAll();
 
     expect(lista.length, 0);
   });
+
+  // test('Should delete a expense', () async {
+  //   await repository.insertExpense(expense);
+
+  //   List<Expense> lista = await repository.findAll();
+
+  //   await repository.deleteExpense(expense);
+
+  //   lista = await repository.findAll();
+
+  //   expect(lista.length, 0);
+  // });
 }
