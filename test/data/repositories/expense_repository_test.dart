@@ -6,15 +6,15 @@ import 'package:get_it/get_it.dart';
 
 void main() {
   ExpensesRepository repository;
+
   GetIt getIt = GetIt.I;
 
   setUp(() async {
-    TestWidgetsFlutterBinding.ensureInitialized();
-
     getIt.registerSingleton<AppDatabase>(
       await $FloorAppDatabase.inMemoryDatabaseBuilder().build(),
     );
     repository = ExpensesRepository();
+
   });
 
   tearDown(() {
@@ -23,35 +23,21 @@ void main() {
   });
 
   test('Should add a expense', () async {
-    await repository.insertExpense(Expense());
-
-    List<Expense> lista = await repository.findAll();
-
-    expect(lista.length, 1);
+    final id = await repository.insertExpense(Expense());
+    expect(id, 1);
   });
 
-  
-  test('Should update a expense', () async {
-    await repository.insertExpense(Expense());
+  test('Should get expense by id', () async {
+    final id = await repository.insertExpense(Expense());
+    Expense expense = await repository.findById(id);
+    expect(expense.id, id);
 
-    List<Expense> lista = await repository.findAll();
-
-    await repository.deleteExpense(lista.elementAt(0));
-
-    lista = await repository.findAll();
-
-    expect(lista.length, 0);
   });
 
-  // test('Should delete a expense', () async {
-  //   await repository.insertExpense(expense);
-
-  //   List<Expense> lista = await repository.findAll();
-
-  //   await repository.deleteExpense(expense);
-
-  //   lista = await repository.findAll();
-
-  //   expect(lista.length, 0);
-  // });
+  test('Should delete a expense', () async {
+    final id = await repository.insertExpense(Expense());
+    Expense expense = await repository.findById(id);
+    final numberOfExpensesDelete = await repository.deleteExpense(expense);
+    expect(numberOfExpensesDelete, 1);
+  });
 }

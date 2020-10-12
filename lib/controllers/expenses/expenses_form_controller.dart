@@ -119,12 +119,13 @@ abstract class _ExpensesFormControllerBase with Store {
     isBusy = true;
 
     final newExpense = Expense(
-        id: id,
-        description: description,
-        value: double.parse(expenseValue),
-        date: date.toIso8601String(),
-        categorie: categorie,
-        observation: observation);
+      id: id,
+      description: description,
+      value: double.parse(expenseValue),
+      date: date.toIso8601String(),
+      categorie: categorie,
+      observation: observation,
+    );
 
     try {
       id == null

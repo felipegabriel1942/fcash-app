@@ -8,15 +8,15 @@ class ExpensesRepository {
   final localDataSource = GetIt.I.get<AppDatabase>().expenseLocalDataSource;
 
 
-  Future<void> insertExpense(Expense expense) {
+  Future<int> insertExpense(Expense expense) {
     return localDataSource.insertExpense(expense);
   }
 
-  Future<void> deleteExpense(Expense expense) {
+  Future<int> deleteExpense(Expense expense) {
     return localDataSource.deleteExpense(expense);
   }
 
-  Future<void> updateExpense(Expense expense) {
+  Future<int> updateExpense(Expense expense) {
     return localDataSource.updateExpense(expense);
   }
 
