@@ -16,15 +16,9 @@ class _HomeScreenState extends State<HomeScreen> {
 
   @override
   void initState() {
-    if (controller.expensesList.isEmpty) {
-      controller.loadExpenses();
-    }
-
-    if (controller.revenuesList.isEmpty) {
-      controller.loadRevenues();
-    }
-
-    controller.loadExpensesByCategory();
+    controller.getTransactionCategories();
+    controller.getExpenses();
+    controller.getRevenues();
     super.initState();
   }
 
@@ -48,6 +42,7 @@ class _HomeScreenState extends State<HomeScreen> {
                   onDecrease: controller.decreaseMonth,
                   onIncrease: controller.increaseMonth,
                   selectedMonth: controller.selectedMonth,
+                  abbreviateDate: false,
                 ),
               );
             }),
@@ -128,7 +123,7 @@ class _HomeScreenState extends State<HomeScreen> {
                     Observer(
                       builder: (_) {
                         return CardItem(
-                          title: 'Resultado',
+                          title: 'Saldo',
                           value: AppFormatUtils.toCurrencyString(
                             value: controller.totalResultValue,
                           ),
@@ -182,7 +177,7 @@ class _HomeScreenState extends State<HomeScreen> {
                           value: AppFormatUtils.toCurrencyString(
                             value: controller.alimentacaoTotalValue,
                           ),
-                          icon: Icons.fastfood,
+                          icon: MdiIcons.fromString('food'),
                         );
                       },
                     ),
@@ -197,7 +192,7 @@ class _HomeScreenState extends State<HomeScreen> {
                           value: AppFormatUtils.toCurrencyString(
                             value: controller.educacaoTotalValue,
                           ),
-                          icon: Icons.school,
+                          icon: MdiIcons.fromString('school'),
                         );
                       },
                     ),
@@ -212,7 +207,7 @@ class _HomeScreenState extends State<HomeScreen> {
                           value: AppFormatUtils.toCurrencyString(
                             value: controller.lazerTotalValue,
                           ),
-                          icon: Icons.beach_access,
+                          icon: MdiIcons.fromString('beach'),
                         );
                       },
                     ),
@@ -227,7 +222,7 @@ class _HomeScreenState extends State<HomeScreen> {
                           value: AppFormatUtils.toCurrencyString(
                             value: controller.moradiaTotalValue,
                           ),
-                          icon: Icons.home,
+                          icon: MdiIcons.fromString('home')
                         );
                       },
                     ),
@@ -242,7 +237,7 @@ class _HomeScreenState extends State<HomeScreen> {
                           value: AppFormatUtils.toCurrencyString(
                             value: controller.pagamentosTotalValue,
                           ),
-                          icon: Icons.payment,
+                          icon: MdiIcons.fromString('creditCard')
                         );
                       },
                     ),
@@ -257,7 +252,7 @@ class _HomeScreenState extends State<HomeScreen> {
                           value: AppFormatUtils.toCurrencyString(
                             value: controller.roupaTotalValue,
                           ),
-                          icon: MdiIcons.shopping,
+                          icon: MdiIcons.fromString('shopping'),
                         );
                       },
                     ),
@@ -272,7 +267,7 @@ class _HomeScreenState extends State<HomeScreen> {
                           value: AppFormatUtils.toCurrencyString(
                             value: controller.saudeTotalValue,
                           ),
-                          icon: MdiIcons.medicalBag,
+                          icon: MdiIcons.fromString('medicalBag'),
                         );
                       },
                     ),
@@ -287,7 +282,7 @@ class _HomeScreenState extends State<HomeScreen> {
                           value: AppFormatUtils.toCurrencyString(
                             value: controller.transporteTotalValue,
                           ),
-                          icon: MdiIcons.car,
+                          icon: MdiIcons.fromString('car'),
                         );
                       },
                     ),

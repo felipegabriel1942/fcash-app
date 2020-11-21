@@ -225,6 +225,23 @@ mixin _$HomeController on _HomeControllerBase, Store {
     });
   }
 
+  final _$transactionCategoriesListAtom =
+      Atom(name: '_HomeControllerBase.transactionCategoriesList');
+
+  @override
+  ObservableList<TransactionCategory> get transactionCategoriesList {
+    _$transactionCategoriesListAtom.reportRead();
+    return super.transactionCategoriesList;
+  }
+
+  @override
+  set transactionCategoriesList(ObservableList<TransactionCategory> value) {
+    _$transactionCategoriesListAtom
+        .reportWrite(value, super.transactionCategoriesList, () {
+      super.transactionCategoriesList = value;
+    });
+  }
+
   final _$selectedMonthAtom = Atom(name: '_HomeControllerBase.selectedMonth');
 
   @override
@@ -270,6 +287,7 @@ transporteTotalValue: ${transporteTotalValue},
 isBusy: ${isBusy},
 expensesList: ${expensesList},
 revenuesList: ${revenuesList},
+transactionCategoriesList: ${transactionCategoriesList},
 selectedMonth: ${selectedMonth},
 totalResultValue: ${totalResultValue}
     ''';

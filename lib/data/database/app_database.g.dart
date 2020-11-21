@@ -66,6 +66,9 @@ class _$AppDatabase extends AppDatabase {
 
   ExpenseByCategoryDataSource _expenseByCategoryDataSourceInstance;
 
+  TransactionCategoryLocalDataSource
+      _transactionCategoryLocalDataSourceInstance;
+
   Future<sqflite.Database> open(String path, List<Migration> migrations,
       [Callback callback]) async {
     final databaseOptions = sqflite.OpenDatabaseOptions(
@@ -87,6 +90,8 @@ class _$AppDatabase extends AppDatabase {
             'CREATE TABLE IF NOT EXISTS `Expense` (`id` INTEGER PRIMARY KEY AUTOINCREMENT, `description` TEXT, `value` REAL, `date` TEXT, `categorie` TEXT, `observation` TEXT)');
         await database.execute(
             'CREATE TABLE IF NOT EXISTS `Revenue` (`id` INTEGER PRIMARY KEY AUTOINCREMENT, `description` TEXT, `value` REAL, `date` TEXT, `categorie` TEXT, `observation` TEXT)');
+        await database.execute(
+            'CREATE TABLE IF NOT EXISTS `TransactionCategory` (`id` INTEGER PRIMARY KEY AUTOINCREMENT, `category` TEXT, `transactionType` TEXT, `icon` TEXT)');
 
         await database.execute(
             '''CREATE VIEW IF NOT EXISTS `expenseByCategory` AS SELECT categorie AS category, SUM(value) AS value FROM Expense GROUP BY categorie ''');
@@ -113,6 +118,12 @@ class _$AppDatabase extends AppDatabase {
   ExpenseByCategoryDataSource get expenseByCategoryDataSource {
     return _expenseByCategoryDataSourceInstance ??=
         _$ExpenseByCategoryDataSource(database, changeListener);
+  }
+
+  @override
+  TransactionCategoryLocalDataSource get transactionCategoryLocalDataSource {
+    return _transactionCategoryLocalDataSourceInstance ??=
+        _$TransactionCategoryLocalDataSource(database, changeListener);
   }
 }
 
@@ -315,5 +326,64 @@ class _$ExpenseByCategoryDataSource extends ExpenseByCategoryDataSource {
         'SELECT categorie AS category, SUM(value) AS value FROM Expense WHERE strftime("%m", date) = ? and strftime("%Y", date) = ? GROUP BY categorie',
         arguments: <dynamic>[month, year],
         mapper: _expenseByCategoryMapper);
+  }
+}
+
+class _$TransactionCategoryLocalDataSource
+    extends TransactionCategoryLocalDataSource {
+  _$TransactionCategoryLocalDataSource(this.database, this.changeListener)
+      : _queryAdapter = QueryAdapter(database),
+        _transactionCategoryInsertionAdapter = InsertionAdapter(
+            database,
+            'TransactionCategory',
+            (TransactionCategory item) => <String, dynamic>{
+                  'id': item.id,
+                  'category': item.category,
+                  'transactionType': item.transactionType,
+                  'icon': item.icon
+                });
+
+  final sqflite.DatabaseExecutor database;
+
+  final StreamController<String> changeListener;
+
+  final QueryAdapter _queryAdapter;
+
+  static final _transactionCategoryMapper = (Map<String, dynamic> row) =>
+      TransactionCategory(
+          id: row['id'] as int,
+          category: row['category'] as String,
+          transactionType: row['transactionType'] as String,
+          icon: row['icon'] as String);
+
+  final InsertionAdapter<TransactionCategory>
+      _transactionCategoryInsertionAdapter;
+
+  @override
+  Future<List<TransactionCategory>> findByTransactionType(String type) async {
+    return _queryAdapter.queryList(
+        'SELECT * FROM TransactionCategory WHERE transactionType = ?',
+        arguments: <dynamic>[type],
+        mapper: _transactionCategoryMapper);
+  }
+
+  @override
+  Future<List<TransactionCategory>> getAllTransactionsCategories() async {
+    return _queryAdapter.queryList('SELECT * FROM TransactionCategory',
+        mapper: _transactionCategoryMapper);
+  }
+
+  @override
+  Future<int> insertTransactionCategory(
+      TransactionCategory transactionCategory) {
+    return _transactionCategoryInsertionAdapter.insertAndReturnId(
+        transactionCategory, OnConflictStrategy.abort);
+  }
+
+  @override
+  Future<List<int>> saveAllTransactionCategories(
+      List<TransactionCategory> transactionCategories) {
+    return _transactionCategoryInsertionAdapter.insertListAndReturnIds(
+        transactionCategories, OnConflictStrategy.abort);
   }
 }

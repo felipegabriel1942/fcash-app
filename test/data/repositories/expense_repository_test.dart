@@ -37,7 +37,7 @@ void main() {
   test('Should delete a expense', () async {
     final id = await repository.insertExpense(Expense());
     Expense expense = await repository.findById(id);
-    final numberOfExpensesDelete = await repository.deleteExpense(expense);
-    expect(numberOfExpensesDelete, 1);
+    final numberOfExpensesDeleted = await repository.deleteExpense(expense);
+    expect(numberOfExpensesDeleted, 1);
   });
 }

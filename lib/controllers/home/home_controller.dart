@@ -1,9 +1,12 @@
 import 'package:fcash_app/data/models/expense.dart';
 import 'package:fcash_app/data/models/revenue.dart';
+import 'package:fcash_app/data/models/transaction_category.dart';
 import 'package:fcash_app/data/repositories/dataview_repository.dart';
 import 'package:fcash_app/data/repositories/expense_repository.dart';
 import 'package:fcash_app/data/repositories/revenue_repository.dart';
+import 'package:fcash_app/data/repositories/transaction_category_repository.dart';
 import 'package:jiffy/jiffy.dart';
+import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 import 'package:mobx/mobx.dart';
 part 'home_controller.g.dart';
 
@@ -13,6 +16,7 @@ abstract class _HomeControllerBase with Store {
   final expensesRepository = ExpensesRepository();
   final revenuesRepository = RevenuesRepository();
   final dataViewRepository = DataViewRepository();
+  final transactionCategoryRepository = TransactionCategoryRepository();
 
   @observable
   double totalExpenseValue = 0;
@@ -54,6 +58,9 @@ abstract class _HomeControllerBase with Store {
   ObservableList<Revenue> revenuesList = ObservableList();
 
   @observable
+  ObservableList<TransactionCategory> transactionCategoriesList = ObservableList();
+
+  @observable
   DateTime selectedMonth = DateTime.now();
 
   @action
@@ -66,19 +73,18 @@ abstract class _HomeControllerBase with Store {
 
   increaseMonth() {
     setSelectedMonth(Jiffy(selectedMonth).add(months: 1));
-    this.loadExpenses();
-    this.loadRevenues();
-    this.loadExpensesByCategory();
+    this.getExpenses();
+    this.getRevenues();
   }
 
   decreaseMonth() {
     setSelectedMonth(Jiffy(selectedMonth).subtract(months: 1));
-    this.loadExpenses();
-    this.loadRevenues();
-    this.loadExpensesByCategory();
+    this.getExpenses();
+    this.getRevenues();
   }
 
-  Future<void> loadExpensesByCategory() async {
+  Future<void> getExpensesTotalValuesByCategoryAndMonth() async {
+
     try {
       pagamentosTotalValue = 0;
       alimentacaoTotalValue = 0;
@@ -135,7 +141,7 @@ abstract class _HomeControllerBase with Store {
     }
   }
 
-  Future<void> loadExpenses() async {
+  Future<void> getExpenses() async {
     try {
       isBusy = true;
 
@@ -159,6 +165,8 @@ abstract class _HomeControllerBase with Store {
         });
       });
 
+      this.getExpensesTotalValuesByCategoryAndMonth();
+
       return expensesList;
     } catch (e) {
       print(e);
@@ -167,7 +175,7 @@ abstract class _HomeControllerBase with Store {
     }
   }
 
-  Future<void> loadRevenues() async {
+  Future<void> getRevenues() async {
     try {
       isBusy = true;
 
@@ -196,5 +204,45 @@ abstract class _HomeControllerBase with Store {
     } finally {
       isBusy = false;
     }
+  }
+
+  Future<void> getTransactionCategories() async {
+
+    try {
+
+      transactionCategoriesList.addAll(
+        await transactionCategoryRepository.getAllTransactionCategories());
+
+      if (await _transactionCategoryListIsEmpty()) {
+        _populateTransactionCategoryDatabaseTable();
+      }
+
+    } catch(e) {
+      print(e);
+    }
+    
+  }
+
+  Future<bool> _transactionCategoryListIsEmpty() async {
+    return transactionCategoriesList.isEmpty;
+  }
+
+  Future<void> _populateTransactionCategoryDatabaseTable() async {
+
+    List<TransactionCategory> transactionCategoriesList  = [
+      TransactionCategory(category: 'Alimentação', transactionType: 'DESPESA', icon: 'food'),
+      TransactionCategory(category: 'Educação', transactionType: 'DESPESA', icon: 'school'),
+      TransactionCategory(category: 'Lazer', transactionType: 'DESPESA', icon: 'beach'),
+      TransactionCategory(category: 'Moradia', transactionType: 'DESPESA', icon: 'home'),
+      TransactionCategory(category: 'Pagamentos', transactionType: 'DESPESA', icon: 'creditCard'),
+      TransactionCategory(category: 'Roupa', transactionType: 'DESPESA', icon: 'shopping'),
+      TransactionCategory(category: 'Saúde', transactionType: 'DESPESA', icon: 'medicalBag'),
+      TransactionCategory(category: 'Transporte', transactionType: 'DESPESA', icon: 'car'),
+    ];
+
+    transactionCategoryRepository.saveAllTransactionCategories(transactionCategoriesList);
+
+    transactionCategoriesList = await transactionCategoryRepository.getAllTransactionCategories();
+    
   }
 }

@@ -70,6 +70,22 @@ mixin _$ExpensesController on _ExpensesControllerBase, Store {
     });
   }
 
+  final _$popMenuItemSelectedAtom =
+      Atom(name: '_ExpensesControllerBase.popMenuItemSelected');
+
+  @override
+  String get popMenuItemSelected {
+    _$popMenuItemSelectedAtom.reportRead();
+    return super.popMenuItemSelected;
+  }
+
+  @override
+  set popMenuItemSelected(String value) {
+    _$popMenuItemSelectedAtom.reportWrite(value, super.popMenuItemSelected, () {
+      super.popMenuItemSelected = value;
+    });
+  }
+
   final _$_ExpensesControllerBaseActionController =
       ActionController(name: '_ExpensesControllerBase');
 
@@ -85,12 +101,24 @@ mixin _$ExpensesController on _ExpensesControllerBase, Store {
   }
 
   @override
+  void setPopMenuItemSelected(String value) {
+    final _$actionInfo = _$_ExpensesControllerBaseActionController.startAction(
+        name: '_ExpensesControllerBase.setPopMenuItemSelected');
+    try {
+      return super.setPopMenuItemSelected(value);
+    } finally {
+      _$_ExpensesControllerBaseActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
   String toString() {
     return '''
 expensesList: ${expensesList},
 totalValue: ${totalValue},
 isBusy: ${isBusy},
-selectedMonth: ${selectedMonth}
+selectedMonth: ${selectedMonth},
+popMenuItemSelected: ${popMenuItemSelected}
     ''';
   }
 }

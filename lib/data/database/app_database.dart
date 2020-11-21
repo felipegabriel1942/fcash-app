@@ -3,8 +3,10 @@ import 'dart:async';
 import 'package:fcash_app/data/datasources/local/data_views/expense_by_category_data_source.dart';
 import 'package:fcash_app/data/datasources/local/expense_local_data_source.dart';
 import 'package:fcash_app/data/datasources/local/revenue_local_data_source.dart';
+import 'package:fcash_app/data/datasources/local/transaction_category_local_data_source.dart';
 import 'package:fcash_app/data/models/data_views/expense_by_categorie.dart';
 import 'package:fcash_app/data/models/revenue.dart';
+import 'package:fcash_app/data/models/transaction_category.dart';
 import 'package:floor/floor.dart';
 import 'package:path/path.dart';
 import 'package:sqflite/sqflite.dart' as sqflite;
@@ -16,7 +18,8 @@ part 'app_database.g.dart';
   version: 1,
   entities: [
     Expense,
-    Revenue
+    Revenue,
+    TransactionCategory
   ],
   views: [
     ExpenseByCategory
@@ -26,4 +29,5 @@ abstract class AppDatabase extends FloorDatabase {
   ExpenseLocalDataSource get expenseLocalDataSource;
   RevenueLocalDataSource get revenueLocalDataSource;
   ExpenseByCategoryDataSource get expenseByCategoryDataSource;
+  TransactionCategoryLocalDataSource get transactionCategoryLocalDataSource;
 }

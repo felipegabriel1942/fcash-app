@@ -79,4 +79,12 @@ abstract class _ExpensesControllerBase with Store {
       isBusy = false;
     }
   }
+
+  @observable
+  String popMenuItemSelected;
+
+  @action
+  void setPopMenuItemSelected(String value) {
+    popMenuItemSelected = value;
+  }
 }

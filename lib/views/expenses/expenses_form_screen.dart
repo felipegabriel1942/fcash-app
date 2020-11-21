@@ -22,6 +22,8 @@ class _ExpensesFormScreenState extends State<ExpensesFormScreen> {
   void initState() {
     super.initState();
 
+    controller.getTransactionCategoryList();
+
     disposer = autorun((_) {
       if (controller.isFormSaved) {
         Navigator.of(context).pop();
@@ -141,73 +143,33 @@ class _ExpensesFormScreenState extends State<ExpensesFormScreen> {
                           );
                         },
                       ),
-                      Observer(
-                        builder: (_) {
-                          return Container(
-                            child: DropdownButtonFormField(
-                              value: controller.categorie,
-                              isExpanded: true,
-                              autovalidate: controller.autovalidate,
-                              decoration: InputDecoration(
-                                labelText: 'Categoria',
-                                fillColor: Colors.white,
-                              ),
-                              validator: controller.categorieValidation,
-                              items: [
-                                DropdownMenuItem(
-                                  child: Text(
-                                    'Alimentação',
-                                  ),
-                                  value: 'alimentacao',
-                                ),
-                                DropdownMenuItem(
-                                  child: Text(
-                                    'Educação',
-                                  ),
-                                  value: 'educacao',
-                                ),
-                                DropdownMenuItem(
-                                  child: Text(
-                                    'Lazer',
-                                  ),
-                                  value: 'lazer',
-                                ),
-                                DropdownMenuItem(
-                                  child: Text(
-                                    'Moradia',
-                                  ),
-                                  value: 'moradia',
-                                ),
-                                DropdownMenuItem(
-                                  child: Text(
-                                    'Pagamentos',
-                                  ),
-                                  value: 'pagamentos',
-                                ),
-                                DropdownMenuItem(
-                                  child: Text(
-                                    'Roupa',
-                                  ),
-                                  value: 'roupa',
-                                ),
-                                DropdownMenuItem(
-                                  child: Text(
-                                    'Saúde',
-                                  ),
-                                  value: 'saude',
-                                ),
-                                DropdownMenuItem(
-                                  child: Text(
-                                    'Transporte',
-                                  ),
-                                  value: 'transporte',
-                                )
-                              ],
-                              onChanged: controller.setCategorie,
-                            ),
-                          );
-                        },
-                      ),
+                      // Observer(
+                      //   builder: (_) {
+                      //     return Container(
+                      //       child: DropdownButtonFormField(
+                      //         value: controller.categorie,
+                      //         isExpanded: true,
+                      //         autovalidate: controller.autovalidate,
+                      //         decoration: InputDecoration(
+                      //           labelText: 'Categoria',
+                      //           fillColor: Colors.white,
+                      //         ),
+                      //         validator: controller.categorieValidation,
+                      //         items: controller.transactionCategoryList == null
+                      //             ? []
+                      //             : controller.transactionCategoryList
+                      //                 .map(
+                      //                   (e) => DropdownMenuItem<int>(
+                      //                     child: Text(e.category),
+                      //                     value: e.id,
+                      //                   ),
+                      //                 )
+                      //                 .toList(),
+                      //         onChanged: controller.setCategorie,
+                      //       ),
+                      //     );
+                      //   },
+                      // ),
                       Container(
                         child: TextFormField(
                           initialValue: controller.observation,

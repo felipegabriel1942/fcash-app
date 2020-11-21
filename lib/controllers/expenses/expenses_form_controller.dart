@@ -1,6 +1,8 @@
 import 'package:fcash_app/controllers/expenses/expenses_controller.dart';
 import 'package:fcash_app/data/models/expense.dart';
+import 'package:fcash_app/data/models/transaction_category.dart';
 import 'package:fcash_app/data/repositories/expense_repository.dart';
+import 'package:fcash_app/data/repositories/transaction_category_repository.dart';
 import 'package:get_it/get_it.dart';
 import 'package:mobx/mobx.dart';
 part 'expenses_form_controller.g.dart';
@@ -11,6 +13,7 @@ class ExpensesFormController = _ExpensesFormControllerBase
 abstract class _ExpensesFormControllerBase with Store {
   final expensesRepository = ExpensesRepository();
   final expensesController = GetIt.I<ExpensesController>();
+  final transactionCategoryRepository = TransactionCategoryRepository();
 
   @observable
   bool autovalidate = false;
@@ -73,10 +76,10 @@ abstract class _ExpensesFormControllerBase with Store {
   }
 
   @observable
-  String categorie;
+  int categorie;
 
   @action
-  void setCategorie(String value) => categorie = value;
+  void setCategorie(int value) => categorie = value;
 
   @action
   String categorieValidation(String value) {
@@ -105,13 +108,21 @@ abstract class _ExpensesFormControllerBase with Store {
   @observable
   bool isFormSaved = false;
 
+  @observable
+  List<TransactionCategory> transactionCategoryList;
+
+  Future<void> getTransactionCategoryList() async {
+    transactionCategoryList =
+        await transactionCategoryRepository.findByTransactionType('DESPESA');
+  }
+
   @action
   void setExpense(Expense expense) {
     id = expense.id;
     description = expense.description;
     expenseValue = expense.value.toStringAsFixed(2);
     date = DateTime.parse(expense.date);
-    categorie = expense.categorie;
+    //categorie = expense.categorie;
     observation = expense.observation;
   }
 
@@ -123,7 +134,7 @@ abstract class _ExpensesFormControllerBase with Store {
       description: description,
       value: double.parse(expenseValue),
       date: date.toIso8601String(),
-      categorie: categorie,
+      //categorie: categorie,
       observation: observation,
     );
 

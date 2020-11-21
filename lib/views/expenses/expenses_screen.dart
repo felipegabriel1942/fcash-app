@@ -8,6 +8,7 @@ import 'package:fcash_app/widgets/empty_list_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:get_it/get_it.dart';
+import 'package:mobx/mobx.dart';
 
 class ExpensesScreen extends StatefulWidget {
   @override
@@ -16,13 +17,34 @@ class ExpensesScreen extends StatefulWidget {
 
 class _ExpensesScreenState extends State<ExpensesScreen> {
   final controller = GetIt.I<ExpensesController>();
+  List<ReactionDisposer> disposers;
 
   @override
   void initState() {
     super.initState();
+
     if (controller.expensesList.isEmpty) {
       controller.loadExpenses();
     }
+
+    final popMenuItemSelectedDispose = reaction(
+      (r) => controller.popMenuItemSelected,
+      (String popMenuItemSelected) {
+        if (popMenuItemSelected.isNotEmpty && popMenuItemSelected == 'filtro') {
+          _showCategoryFilterDialog();
+        }
+      },
+    );
+
+    disposers = [
+      popMenuItemSelectedDispose,
+    ];
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+    disposers.forEach((dispose) => dispose());
   }
 
   @override
@@ -35,6 +57,7 @@ class _ExpensesScreenState extends State<ExpensesScreen> {
 
     return Scaffold(
       appBar: AppBar(
+        elevation: 0,
         title: Row(
           children: [
             Container(
@@ -62,29 +85,40 @@ class _ExpensesScreenState extends State<ExpensesScreen> {
                 ],
               ),
             ),
-            Observer(
-              builder: (_) {
-                return Container(
-                  width: _availableWidth * 0.57,
-                  child: CustomMonthPicker(
-                    onDecrease:
-                        controller.isBusy ? null : controller.decreaseMonth,
-                    onIncrease:
-                        controller.isBusy ? null : controller.increaseMonth,
-                    selectedMonth: controller.selectedMonth,
-                  ),
-                );
-              },
-            )
           ],
         ),
         backgroundColor: Colors.red[400],
+        actions: [
+          PopupMenuButton(
+            onSelected: controller.setPopMenuItemSelected,
+            icon: Icon(Icons.more_vert),
+            itemBuilder: (_) => [
+              PopupMenuItem(
+                child: Text('Filtrar por categoria'),
+                value: 'filtro',
+              ),
+            ],
+          )
+        ],
       ),
       body: SingleChildScrollView(
         child: Container(
           width: double.infinity,
           child: Column(
             children: [
+              Observer(
+                builder: (_) {
+                  return Container(
+                    color: Colors.red[400],
+                    child: CustomMonthPicker(
+                      abbreviateDate: false,
+                      onDecrease: controller.isBusy ? null : controller.decreaseMonth,
+                      onIncrease: controller.isBusy ? null : controller.increaseMonth,
+                      selectedMonth: controller.selectedMonth,
+                    ),
+                  );
+                },
+              ),
               ExpensesList(
                 availableHeight: _availableHeight,
                 controller: controller,
@@ -105,6 +139,42 @@ class _ExpensesScreenState extends State<ExpensesScreen> {
         },
       ),
     );
+  }
+
+  _showCategoryFilterDialog() async {
+    await showDialog(
+      context: context,
+      child: AlertDialog(
+        title: Text('Categorias'),
+        content: SingleChildScrollView(
+          child: ListBody(
+            children: [
+              CheckboxListTile(
+                contentPadding: const EdgeInsets.symmetric(horizontal: 4),
+                value: true,
+                onChanged: (_) {},
+                title: Text(
+                  'Alimentação',
+                  style: TextStyle(
+                    color: Colors.grey[600],
+                  ),
+                ),
+              ),
+              CheckboxListTile(
+                  contentPadding: const EdgeInsets.symmetric(horizontal: 4),
+                  value: true,
+                  onChanged: (_) {},
+                  title: Text(
+                    'Educação',
+                    style: TextStyle(
+                      color: Colors.grey[600],
+                    ),
+                  ))
+            ],
+          ),
+        ),
+      ),
+    ).then((value) => controller.setPopMenuItemSelected(''));
   }
 }
 

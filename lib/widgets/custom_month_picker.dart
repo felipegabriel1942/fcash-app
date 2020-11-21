@@ -4,60 +4,63 @@ class CustomMonthPicker extends StatelessWidget {
   final Function onIncrease;
   final Function onDecrease;
   final DateTime selectedMonth;
+  final bool abbreviateDate;
 
   CustomMonthPicker({
     @required this.onIncrease,
     @required this.onDecrease,
     @required this.selectedMonth,
+    @required this.abbreviateDate
   });
 
   _buildMonthLabel(DateTime date) {
+
     if (date.month == 1) {
-      return 'Jan/${date.year}';
+      return '${abbreviateDate ? 'Jan' : 'Janeiro'}/${date.year}';
     }
 
     if (date.month == 2) {
-      return 'Fev/${date.year}';
+      return '${abbreviateDate ? 'Fev' : 'Fevereiro'}/${date.year}';
     }
 
     if (date.month == 3) {
-      return 'Mar/${date.year}';
+      return '${abbreviateDate ? 'Mar' : 'Março'}/${date.year}';
     }
 
     if (date.month == 4) {
-      return 'Abr/${date.year}';
+      return '${abbreviateDate ? 'Abr' : 'Abril'}/${date.year}';
     }
 
     if (date.month == 5) {
-      return 'Mai/${date.year}';
+      return '${abbreviateDate ? 'Mai' : 'Maio'}/${date.year}';
     }
 
     if (date.month == 6) {
-      return 'Jun/${date.year}';
+      return '${abbreviateDate ? 'Jun' : 'Junho'}/${date.year}';
     }
 
     if (date.month == 7) {
-      return 'Jul/${date.year}';
+      return '${abbreviateDate ? 'Jul' : 'Julho'}/${date.year}';
     }
 
     if (date.month == 8) {
-      return 'Ago/${date.year}';
+      return '${abbreviateDate ? 'Ago' : 'Agosto'}/${date.year}';
     }
 
     if (date.month == 9) {
-      return 'Set/${date.year}';
+      return '${abbreviateDate ? 'Set' : 'Setembro'}/${date.year}';
     }
 
     if (date.month == 10) {
-      return 'Out/${date.year}';
+      return '${abbreviateDate ? 'Out' : 'Outubro'}/${date.year}';
     }
 
     if (date.month == 11) {
-      return 'Nov/${date.year}';
+      return '${abbreviateDate ? 'Nov' : 'Novembro'}/${date.year}';
     }
 
     if (date.month == 12) {
-      return 'Dez/${date.year}';
+      return '${abbreviateDate ? 'Dez' : 'Dezembro'}/${date.year}';
     }
   }
 
@@ -81,6 +84,7 @@ class CustomMonthPicker extends StatelessWidget {
               style: TextStyle(
                 fontSize: 16,
                 color: Colors.white,
+                fontWeight: FontWeight.bold
               ),
             ),
           ),

@@ -70,11 +70,10 @@ class _RevenuesScreenState extends State<RevenuesScreen> {
                 return Container(
                   width: _availableWidth * 0.57,
                   child: CustomMonthPicker(
-                    onDecrease:
-                        controller.isBusy ? null : controller.decreaseMonth,
-                    onIncrease:
-                        controller.isBusy ? null : controller.increaseMonth,
+                    onDecrease: controller.isBusy ? null : controller.decreaseMonth,
+                    onIncrease: controller.isBusy ? null : controller.increaseMonth,
                     selectedMonth: controller.selectedMonth,
+                    abbreviateDate: false,
                   ),
                 );
               },

@@ -126,13 +126,13 @@ mixin _$ExpensesFormController on _ExpensesFormControllerBase, Store {
   final _$categorieAtom = Atom(name: '_ExpensesFormControllerBase.categorie');
 
   @override
-  String get categorie {
+  int get categorie {
     _$categorieAtom.reportRead();
     return super.categorie;
   }
 
   @override
-  set categorie(String value) {
+  set categorie(int value) {
     _$categorieAtom.reportWrite(value, super.categorie, () {
       super.categorie = value;
     });
@@ -182,6 +182,23 @@ mixin _$ExpensesFormController on _ExpensesFormControllerBase, Store {
   set isFormSaved(bool value) {
     _$isFormSavedAtom.reportWrite(value, super.isFormSaved, () {
       super.isFormSaved = value;
+    });
+  }
+
+  final _$transactionCategoryListAtom =
+      Atom(name: '_ExpensesFormControllerBase.transactionCategoryList');
+
+  @override
+  List<TransactionCategory> get transactionCategoryList {
+    _$transactionCategoryListAtom.reportRead();
+    return super.transactionCategoryList;
+  }
+
+  @override
+  set transactionCategoryList(List<TransactionCategory> value) {
+    _$transactionCategoryListAtom
+        .reportWrite(value, super.transactionCategoryList, () {
+      super.transactionCategoryList = value;
     });
   }
 
@@ -256,7 +273,7 @@ mixin _$ExpensesFormController on _ExpensesFormControllerBase, Store {
   }
 
   @override
-  void setCategorie(String value) {
+  void setCategorie(int value) {
     final _$actionInfo = _$_ExpensesFormControllerBaseActionController
         .startAction(name: '_ExpensesFormControllerBase.setCategorie');
     try {
@@ -311,6 +328,7 @@ categorie: ${categorie},
 observation: ${observation},
 isBusy: ${isBusy},
 isFormSaved: ${isFormSaved},
+transactionCategoryList: ${transactionCategoryList},
 isDescriptionValid: ${isDescriptionValid},
 isExpenseValueValid: ${isExpenseValueValid},
 isDateValid: ${isDateValid},
